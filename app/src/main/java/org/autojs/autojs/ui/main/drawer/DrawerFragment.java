@@ -280,7 +280,7 @@ public class DrawerFragment extends androidx.fragment.app.Fragment {
     }
 
     void openThemeColorSettings(DrawerMenuItemViewHolder holder) {
-        SettingsActivity.selectThemeColor(getActivity());
+//        SettingsActivity.selectThemeColor(getActivity());
     }
 
     void toggleNightMode(DrawerMenuItemViewHolder holder) {

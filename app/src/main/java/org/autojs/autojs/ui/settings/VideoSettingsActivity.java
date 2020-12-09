@@ -2,44 +2,48 @@ package org.autojs.autojs.ui.settings;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceScreen;
+import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.JsonWriter;
 import android.util.Log;
+import android.view.DragEvent;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.util.Pair;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.stardust.autojs.execution.ScriptExecution;
+import com.stardust.autojs.script.StringScriptSource;
+import com.stardust.pio.PFile;
 import com.stardust.pio.PFiles;
 import com.stardust.theme.app.ColorSelectActivity;
-import com.stardust.theme.preference.ThemeColorPreferenceFragment;
 import com.stardust.theme.util.ListBuilder;
-import com.stardust.util.MapBuilder;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.autojs.autojs.R;
-import org.autojs.autojs.model.indices.Module;
-import org.autojs.autojs.tool.Observers;
+import org.autojs.autojs.R2;
+import org.autojs.autojs.model.script.Scripts;
 import org.autojs.autojs.ui.BaseActivity;
-import org.autojs.autojs.ui.error.IssueReporterActivity;
-import org.autojs.autojs.ui.update.UpdateCheckDialog;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -47,16 +51,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import butterknife.BindView;
-import de.psdev.licensesdialog.LicenseResolver;
-import de.psdev.licensesdialog.LicensesDialog;
-import de.psdev.licensesdialog.licenses.License;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -65,7 +62,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Stardust on 2017/2/2.
  */
 @EActivity(R.layout.activity_video_settings)
-public class VideoSettingsActivity extends BaseActivity {
+public class VideoSettingsActivity extends BaseActivity implements View.OnTouchListener, View.OnClickListener {
 
     @ViewById(R.id.et_runtime)
     EditText etRuntime;
@@ -84,6 +81,10 @@ public class VideoSettingsActivity extends BaseActivity {
     @ViewById(R.id.st_recomment)
     Switch switchRecomment;
     private VideoSetting videoSetting;
+    private WindowManager.LayoutParams mParams;
+    private WindowManager mWindowManager;
+    TextView tvStatus;
+    View mFloatingWindow;
 
     private static final List<Pair<Integer, Integer>> COLOR_ITEMS = new ListBuilder<Pair<Integer, Integer>>()
             .add(new Pair<>(R.color.theme_color_red, R.string.theme_color_red))
@@ -116,6 +117,12 @@ public class VideoSettingsActivity extends BaseActivity {
         ColorSelectActivity.startColorSelect(context, context.getString(R.string.mt_color_picker_title), colorItems);
     }
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+    }
+
     @AfterViews
     void setUpUI() {
         setUpToolbar();
@@ -137,47 +144,124 @@ public class VideoSettingsActivity extends BaseActivity {
 
     @Click(R.id.btn_save)
     void saveAndRun() {
-        if (TextUtils.isEmpty(etRuntime.getText())) {
-            etRuntime.setText("10");
-        }
-        if (TextUtils.isEmpty(etGap.getText())) {
-            etGap.setText("1");
-        }
-        int runtime = Integer.parseInt(etRuntime.getText().toString());
-        int gap = Integer.parseInt(etGap.getText().toString());
-        boolean follow = switchFollow.isChecked();
-        boolean praise = switchPraise.isChecked();
-        boolean comment = switchComment.isChecked();
-        boolean message = switchMessage.isChecked();
-        boolean collect = switchCollect.isChecked();
-        boolean recomment = switchRecomment.isChecked();
-        VideoSetting videoSetting = new VideoSetting();
-        videoSetting.setRuntime(runtime);
-        videoSetting.setGap(gap);
-        videoSetting.setFollow(follow);
-        videoSetting.setPraise(praise);
-        videoSetting.setComment(comment);
-        videoSetting.setMessage(message);
-        videoSetting.setCollect(collect);
-        videoSetting.setRecomment(recomment);
-        String data = new Gson().toJson(videoSetting);
-        Log.d(TAG, data);
-        try {
-            saveToFile(data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        runTask();
+//        if (TextUtils.isEmpty(etRuntime.getText())) {
+//            etRuntime.setText("10");
+//        }
+//        if (TextUtils.isEmpty(etGap.getText())) {
+//            etGap.setText("1");
+//        }
+//        int runtime = Integer.parseInt(etRuntime.getText().toString());
+//        int gap = Integer.parseInt(etGap.getText().toString());
+//        boolean follow = switchFollow.isChecked();
+//        boolean praise = switchPraise.isChecked();
+//        boolean comment = switchComment.isChecked();
+//        boolean message = switchMessage.isChecked();
+//        boolean collect = switchCollect.isChecked();
+//        boolean recomment = switchRecomment.isChecked();
+//        VideoSetting videoSetting = new VideoSetting();
+//        videoSetting.setRuntime(runtime);
+//        videoSetting.setGap(gap);
+//        videoSetting.setFollow(follow);
+//        videoSetting.setPraise(praise);
+//        videoSetting.setComment(comment);
+//        videoSetting.setMessage(message);
+//        videoSetting.setCollect(collect);
+//        videoSetting.setRecomment(recomment);
+//        String data = new Gson().toJson(videoSetting);
+//        Log.d(TAG, data);
+//        try {
+//            //保存配置
+//            saveToFile(data);
+//            //运行脚本
+//            runTask(true);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        showFloatingWindwo();
     }
 
-    private void runTask() {
+    private void showFloatingWindwo() {
+        //设置允许弹出悬浮窗口的权限
+        requestWindowPermission();
+        //创建窗口布局参数
+        mParams = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT, 0, 0, PixelFormat.TRANSPARENT);
+        //设置悬浮窗坐标
+        mParams.x = 100;
+        mParams.y = 100;
+        //表示该Window无需获取焦点，也不需要接收输入事件
+        mParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        mParams.gravity = Gravity.LEFT | Gravity.TOP;
+        Log.d("MainActivity", "sdk:" + Build.VERSION.SDK_INT);
+        //设置window 类型
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//API Level 26
+            mParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            mParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+        }
+        //创建悬浮窗(其实就创建了一个Button,这里也可以创建其他类型的控件)
+        if (null == mFloatingWindow) {
+            mFloatingWindow = getLayoutInflater().inflate(R.layout.win_floating_tool, null, false);
+            ImageView ivRun = mFloatingWindow.findViewById(R.id.iv_run);
+            ImageView ivClose = mFloatingWindow.findViewById(R.id.iv_close);
+            tvStatus = mFloatingWindow.findViewById(R.id.tv_status);
+            ImageView ivDrag = mFloatingWindow.findViewById(R.id.iv_drag);
+            mFloatingWindow.setOnTouchListener(this);
+            ivRun.setOnClickListener(this);
+            ivClose.setOnClickListener(this);
+            mWindowManager.addView(mFloatingWindow, mParams);
+        }
+    }
 
+    /**
+     * 获取悬浮窗权限
+     */
+    private void requestWindowPermission() {
+        //android 6.0或者之后的版本需要发一个intent让用户授权
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(getApplicationContext())) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                startActivityForResult(intent, 100);
+            }
+        }
+    }
+
+    /**
+     * 运行脚本
+     *
+     * @param showMessage
+     * @return
+     * @throws IOException
+     */
+    private ScriptExecution runTask(boolean showMessage) throws IOException {
+        if (showMessage) {
+            Toast.makeText(this, R.string.text_start_running, Toast.LENGTH_SHORT).show();
+        }
+//        String fileParentPath = getFilesDir().getAbsolutePath();
+//        if (!fileParentPath.endsWith("/")) {
+//            fileParentPath += "/";
+//        }
+//        ScriptExecution execution = Scripts.INSTANCE.runWithBroadcastSender(new File(fileParentPath + SCRIPT_FILE_NAME));
+        ScriptExecution execution = Scripts.INSTANCE.run(new StringScriptSource(PFiles.read(getAssets().open(SCRIPT_FILE_NAME))));
+        if (execution == null) {
+            return null;
+        }
+        Log.d(TAG, execution.getId() + "");
+        return execution;
     }
 
     private final static String TAG = "xpf";
     private final static String FILE_NAME = "video_settings.json";
+    private final static String SCRIPT_FILE_NAME = "sample/wechat/hello.js";
 
-    private void saveToFile(String val) throws IOException{
+    /**
+     * 保存到文件
+     *
+     * @param val
+     * @throws IOException
+     */
+    private void saveToFile(String val) throws IOException {
         FileOutputStream fout = null;
         BufferedWriter bw = null;
         try {
@@ -188,43 +272,26 @@ public class VideoSettingsActivity extends BaseActivity {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         } finally {
-            if (bw!=null){
+            if (bw != null) {
                 bw.close();
             }
-            if (fout!=null){
+            if (fout != null) {
                 fout.close();
             }
         }
-//        save()
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(Observers.emptyConsumer(), e -> {
-//                    e.printStackTrace();
-//                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-//                });
     }
 
-//    public Observable<String> save() throws IOException {
-//        this.getAssets().open("indices/video_settings.json");
-//        PFiles.append();
-//        Uri mUri = Uri.fromFile()
-////        String path = mUri.getPath();
-//        PFiles.move(path, path + ".bak");
-//        return Observable.just(mEditor.getText())
-//                .observeOn(Schedulers.io())
-//                .doOnNext(s -> PFiles.write(getContext().getContentResolver().openOutputStream(mUri), s))
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .doOnNext(s -> {
-//                    mEditor.markTextAsSaved();
-//                    setMenuItemStatus(R.id.save, false);
-//                });
-//    }
-
+    /**
+     * 获取已有的配置
+     *
+     * @param context
+     */
     public void getVideoSettings(Context context) {
         if (videoSetting != null) {
             return;
         }
-        if (getFileStreamPath(FILE_NAME).exists()){
-            Log.d(TAG,getFileStreamPath(FILE_NAME).getAbsolutePath());
+        if (getFileStreamPath(FILE_NAME).exists()) {
+            Log.d(TAG, getFileStreamPath(FILE_NAME).getAbsolutePath());
             Observable.fromCallable(() -> loadSettingsFrom(openFileInput(FILE_NAME)))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -245,6 +312,50 @@ public class VideoSettingsActivity extends BaseActivity {
     private VideoSetting loadSettingsFrom(InputStream inputStream) {
         Gson gson = new Gson();
         return gson.fromJson(new InputStreamReader(inputStream), VideoSetting.class);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.iv_run) {
+            try {
+                runTask(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (v.getId() == R.id.iv_close) {
+            if (null != mFloatingWindow) {
+                mWindowManager.removeView(mFloatingWindow);
+                mFloatingWindow = null;
+            }
+        }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        int rawX=(int)event.getRawX();
+        int rawY=(int)event.getRawY();
+        switch(event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                mParams.x=rawX;
+                mParams.y=rawY;
+                mWindowManager.updateViewLayout(mFloatingWindow,mParams);
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+            default:
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (null != mFloatingWindow) {
+            mWindowManager.removeView(mFloatingWindow);
+        }
     }
 
     class VideoSetting implements Serializable {

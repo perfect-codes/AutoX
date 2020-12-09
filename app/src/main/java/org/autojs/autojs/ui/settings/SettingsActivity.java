@@ -1,33 +1,35 @@
 package org.autojs.autojs.ui.settings;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
-import androidx.core.util.Pair;
-import androidx.appcompat.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
-import com.stardust.theme.app.ColorSelectActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.afollestad.materialdialogs.util.DialogUtils;
 import com.stardust.theme.preference.ThemeColorPreferenceFragment;
-import com.stardust.theme.util.ListBuilder;
-import com.stardust.util.MapBuilder;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.CheckedChange;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.autojs.autojs.R;
 import org.autojs.autojs.ui.BaseActivity;
-import org.autojs.autojs.ui.error.IssueReporterActivity;
-import org.autojs.autojs.ui.update.UpdateCheckDialog;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
-import de.psdev.licensesdialog.LicenseResolver;
+import butterknife.OnClick;
 import de.psdev.licensesdialog.LicensesDialog;
-import de.psdev.licensesdialog.licenses.License;
 
 /**
  * Created by Stardust on 2017/2/2.
@@ -35,41 +37,9 @@ import de.psdev.licensesdialog.licenses.License;
 @EActivity(R.layout.activity_settings)
 public class SettingsActivity extends BaseActivity {
 
-    private static final List<Pair<Integer, Integer>> COLOR_ITEMS = new ListBuilder<Pair<Integer, Integer>>()
-            .add(new Pair<>(R.color.theme_color_red, R.string.theme_color_red))
-            .add(new Pair<>(R.color.theme_color_pink, R.string.theme_color_pink))
-            .add(new Pair<>(R.color.theme_color_purple, R.string.theme_color_purple))
-            .add(new Pair<>(R.color.theme_color_dark_purple, R.string.theme_color_dark_purple))
-            .add(new Pair<>(R.color.theme_color_indigo, R.string.theme_color_indigo))
-            .add(new Pair<>(R.color.theme_color_blue, R.string.theme_color_blue))
-            .add(new Pair<>(R.color.theme_color_light_blue, R.string.theme_color_light_blue))
-            .add(new Pair<>(R.color.theme_color_blue_green, R.string.theme_color_blue_green))
-            .add(new Pair<>(R.color.theme_color_cyan, R.string.theme_color_cyan))
-            .add(new Pair<>(R.color.theme_color_green, R.string.theme_color_green))
-            .add(new Pair<>(R.color.theme_color_light_green, R.string.theme_color_light_green))
-            .add(new Pair<>(R.color.theme_color_yellow_green, R.string.theme_color_yellow_green))
-            .add(new Pair<>(R.color.theme_color_yellow, R.string.theme_color_yellow))
-            .add(new Pair<>(R.color.theme_color_amber, R.string.theme_color_amber))
-            .add(new Pair<>(R.color.theme_color_orange, R.string.theme_color_orange))
-            .add(new Pair<>(R.color.theme_color_dark_orange, R.string.theme_color_dark_orange))
-            .add(new Pair<>(R.color.theme_color_brown, R.string.theme_color_brown))
-            .add(new Pair<>(R.color.theme_color_gray, R.string.theme_color_gray))
-            .add(new Pair<>(R.color.theme_color_blue_gray, R.string.theme_color_blue_gray))
-            .list();
-
-    public static void selectThemeColor(Context context) {
-        List<ColorSelectActivity.ColorItem> colorItems = new ArrayList<>(COLOR_ITEMS.size());
-        for (Pair<Integer, Integer> item : COLOR_ITEMS) {
-            colorItems.add(new ColorSelectActivity.ColorItem(context.getString(item.second),
-                    context.getResources().getColor(item.first)));
-        }
-        ColorSelectActivity.startColorSelect(context, context.getString(R.string.mt_color_picker_title), colorItems);
-    }
-
     @AfterViews
     void setUpUI() {
         setUpToolbar();
-        getFragmentManager().beginTransaction().replace(R.id.fragment_setting, new PreferenceFragment()).commit();
     }
 
     private void setUpToolbar() {
@@ -85,80 +55,75 @@ public class SettingsActivity extends BaseActivity {
         });
     }
 
+    @Click(R.id.tv_key)
+    public void showAppKey(){
+        String fingerPrint = android.os.Build.FINGERPRINT;
+        String md5Str = md5(fingerPrint);
+        String key = md5Str.substring(8,24);
+        AlertDialog dialog = new AlertDialog.Builder(this).setTitle("应用KEY").setMessage(key)
+                .setPositiveButton("复制", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        copyContentToClipboard(key, SettingsActivity.this);
+                        Toast.makeText(SettingsActivity.this,"复制成功",Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                })
+                .create();
+        dialog.show();
+    }
 
-    public static class PreferenceFragment extends ThemeColorPreferenceFragment {
+    @Click(R.id.tv_comment)
+    public void setComment(){
+        Toast.makeText(SettingsActivity.this,"设置评论",Toast.LENGTH_SHORT).show();
+    }
 
-        private Map<String, Runnable> ACTION_MAP;
+    @CheckedChange(R.id.st_wu)
+    public void changeWu(){
+        Toast.makeText(SettingsActivity.this,"开启无障碍",Toast.LENGTH_SHORT).show();
+    }
 
+    @CheckedChange(R.id.st_floating)
+    public void changeFloating(){
+        Toast.makeText(SettingsActivity.this,"授权启用浮窗",Toast.LENGTH_SHORT).show();
+    }
 
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.preferences);
+    @Click(R.id.tv_about)
+    public void about(){
+        Toast.makeText(SettingsActivity.this,"关于",Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 复制内容到剪贴板
+     *
+     * @param content
+     * @param context
+     */
+    public void copyContentToClipboard(String content, Context context) {
+        //获取剪贴板管理器：
+        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        // 创建普通字符型ClipData
+        ClipData mClipData = ClipData.newPlainText("Label", content);
+        // 将ClipData内容放到系统剪贴板里。
+        cm.setPrimaryClip(mClipData);
+    }
+
+    private String md5(String val){
+        String[] hexArray = {"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"};
+        try{
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(val.getBytes());
+            byte[] rawBit = md.digest();
+            String outputMD5 = " ";
+            for(int i = 0; i<16; i++){
+                outputMD5 = outputMD5+hexArray[rawBit[i]>>>4& 0x0f];
+                outputMD5 = outputMD5+hexArray[rawBit[i]& 0x0f];
+            }
+            return outputMD5.trim();
+        }catch(NoSuchAlgorithmException e){
+            System.out.println("计算MD5值发生错误");
+            e.printStackTrace();
         }
-
-        @Override
-        public void onStart() {
-            super.onStart();
-            ACTION_MAP = new MapBuilder<String, Runnable>()
-                    .put(getString(R.string.text_theme_color), () -> selectThemeColor(getActivity()))
-                    .put(getString(R.string.text_check_for_updates), () -> new UpdateCheckDialog(getActivity())
-                            .show())
-                    .put(getString(R.string.text_issue_report), () -> startActivity(new Intent(getActivity(), IssueReporterActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)))
-                    .put(getString(R.string.text_about_me_and_repo), () -> startActivity(new Intent(getActivity(), AboutActivity_.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)))
-                    .put(getString(R.string.text_licenses), () -> showLicenseDialog())
-                    .build();
-        }
-
-        @Override
-        public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-            Runnable action = ACTION_MAP.get(preference.getTitle().toString());
-            if (action != null) {
-                action.run();
-                return true;
-            } else {
-                return super.onPreferenceTreeClick(preferenceScreen, preference);
-            }
-        }
-
-        private void showLicenseDialog() {
-            LicenseResolver.registerLicense(MozillaPublicLicense20.instance);
-            new LicensesDialog.Builder(getActivity())
-                    .setNotices(R.raw.licenses)
-                    .setIncludeOwnLicense(true)
-                    .build()
-                    .showAppCompat();
-        }
-
-        public static class MozillaPublicLicense20 extends License {
-
-            public static MozillaPublicLicense20 instance = new MozillaPublicLicense20();
-
-            @Override
-            public String getName() {
-                return "Mozilla Public License 2.0";
-            }
-
-            @Override
-            public String readSummaryTextFromResources(Context context) {
-                return getContent(context, R.raw.mpl_20_summary);
-            }
-
-            @Override
-            public String readFullTextFromResources(Context context) {
-                return getContent(context, R.raw.mpl_20_full);
-            }
-
-            @Override
-            public String getVersion() {
-                return "2.0";
-            }
-
-            @Override
-            public String getUrl() {
-                return "https://www.mozilla.org/en-US/MPL/2.0/";
-            }
-        }
-
+        return null;
     }
 }
