@@ -22,6 +22,7 @@ import com.stardust.autojs.core.ui.inflater.util.Drawables
 import com.stardust.theme.ThemeColor
 import com.tencent.bugly.Bugly
 import com.tencent.bugly.crashreport.CrashReport
+import com.xuexiang.xui.XUI
 import org.autojs.autojs.autojs.AutoJs
 import org.autojs.autojs.autojs.key.GlobalKeyObserver
 import org.autojs.autojs.external.receiver.DynamicBroadcastReceivers
@@ -48,6 +49,8 @@ class App : MultiDexApplication() {
         setUpStaticsTool()
         setUpDebugEnvironment()
         init()
+        XUI.init(this); //初始化UI框架
+        XUI.debug(true);  //开启UI框架调试日志
     }
 
     private fun setUpStaticsTool() {

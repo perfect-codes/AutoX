@@ -83,19 +83,19 @@ public class MyScriptListFragment extends ViewPagerFragment implements FloatingA
     private void initFloatingActionMenuIfNeeded(final FloatingActionButton fab) {
         if (mFloatingActionMenu != null)
             return;
-        mFloatingActionMenu = getActivity().findViewById(R.id.floating_action_menu);
-        mFloatingActionMenu.getState()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
-                    @Override
-                    public void onNext(@io.reactivex.annotations.NonNull Boolean expanding) {
-                        fab.animate()
-                                .rotation(expanding ? 45 : 0)
-                                .setDuration(300)
-                                .start();
-                    }
-                });
-        mFloatingActionMenu.setOnFloatingActionButtonClickListener(this);
+//        mFloatingActionMenu = getActivity().findViewById(R.id.floating_action_menu);
+//        mFloatingActionMenu.getState()
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new SimpleObserver<Boolean>() {
+//                    @Override
+//                    public void onNext(@io.reactivex.annotations.NonNull Boolean expanding) {
+//                        fab.animate()
+//                                .rotation(expanding ? 45 : 0)
+//                                .setDuration(300)
+//                                .start();
+//                    }
+//                });
+//        mFloatingActionMenu.setOnFloatingActionButtonClickListener(this);
     }
 
     @Override

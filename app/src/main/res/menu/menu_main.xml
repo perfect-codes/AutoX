@@ -4,16 +4,7 @@
 
     <item
         android:id="@+id/action_log"
-        android:icon="@drawable/ic_ali_log"
-        android:title="@string/text_log"
+        android:icon="@drawable/ic_circular_menu_settings"
+        android:title="@string/text_setting"
         app:showAsAction="always"/>
-
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_white_36dp"
-        android:imeOptions="actionSearch"
-        android:inputType="text"
-        android:title="@string/text_search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="always|collapseActionView"/>
 </menu>

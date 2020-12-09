@@ -96,6 +96,9 @@
             android:theme="@style/AppTheme.Settings"/>
         <activity android:name=".ui.error.ErrorReportActivity"/>
         <activity
+            android:name=".ui.settings.VideoSettingsActivity_"
+            android:theme="@style/AppTheme.Settings"/>
+        <activity
             android:name=".external.tasker.TaskerScriptEditActivity_"
             android:configChanges="orientation|screenSize"
             />

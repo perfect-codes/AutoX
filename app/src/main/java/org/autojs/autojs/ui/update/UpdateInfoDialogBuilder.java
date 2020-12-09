@@ -75,7 +75,8 @@ public class UpdateInfoDialogBuilder extends MaterialDialog.Builder {
         if (mSharedPreferences.getBoolean(KEY_DO_NOT_ASK_AGAIN_FOR_VERSION + mVersionInfo.versionCode, false)) {
             return null;
         }
-        return super.show();
+//        return super.show();
+        return null;
     }
 
     private void setCurrentVersionIssues(View view, VersionInfo info) {
