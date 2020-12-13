@@ -1,4 +1,4 @@
-package org.autojs.autojs;
+package com.fj.aux;
 
 import org.junit.Test;
 

@@ -41,49 +41,49 @@
             android:layout_alignParentRight="true"
             android:singleLine="true"
             android:inputType="number"
-            android:gravity="center"
+            android:textAlignment="center"
             android:maxLength="4"/>
     </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="5dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="操作间隔(秒)"
-            android:textSize="18sp"
-            android:textColor="@color/theme_color_black"/>
-        <EditText
-            android:id="@+id/et_gap"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:singleLine="true"
-            android:inputType="number"
-            android:gravity="center"
-            android:maxLength="4"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="5dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="关注"
-            android:textSize="18sp"
-            android:textColor="@color/theme_color_black"/>
-        <Switch
-            android:id="@+id/st_follow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"/>
-    </RelativeLayout>
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:paddingHorizontal="15dp"-->
+<!--        android:paddingVertical="5dp">-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center"-->
+<!--            android:text="操作间隔(秒)"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textColor="@color/theme_color_black"/>-->
+<!--        <EditText-->
+<!--            android:id="@+id/et_gap"-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:singleLine="true"-->
+<!--            android:inputType="number"-->
+<!--            android:textAlignment="center"-->
+<!--            android:maxLength="4"/>-->
+<!--    </RelativeLayout>-->
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:paddingHorizontal="15dp"-->
+<!--        android:paddingVertical="5dp">-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center"-->
+<!--            android:text="关注"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textColor="@color/theme_color_black"/>-->
+<!--        <Switch-->
+<!--            android:id="@+id/st_follow"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentRight="true"/>-->
+<!--    </RelativeLayout>-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -120,24 +120,24 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="5dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="私信"
-            android:textSize="18sp"
-            android:textColor="@color/theme_color_black"/>
-        <Switch
-            android:id="@+id/st_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"/>
-    </RelativeLayout>
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:paddingHorizontal="15dp"-->
+<!--        android:paddingVertical="5dp">-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center"-->
+<!--            android:text="私信"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textColor="@color/theme_color_black"/>-->
+<!--        <Switch-->
+<!--            android:id="@+id/st_message"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentRight="true"/>-->
+<!--    </RelativeLayout>-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -156,30 +156,31 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="5dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="追评"
-            android:textSize="18sp"
-            android:textColor="@color/theme_color_black"/>
-        <Switch
-            android:id="@+id/st_recomment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"/>
-    </RelativeLayout>
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:paddingHorizontal="15dp"-->
+<!--        android:paddingVertical="5dp">-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center"-->
+<!--            android:text="追评"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textColor="@color/theme_color_black"/>-->
+<!--        <Switch-->
+<!--            android:id="@+id/st_recomment"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentRight="true"/>-->
+<!--    </RelativeLayout>-->
     <Button
         android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginHorizontal="15dp"
+        android:paddingVertical="10dp"
         android:background="@drawable/bg_shap_rounded_border"
         android:text="保存并运行"
         android:textColor="@color/xui_config_color_white"/>

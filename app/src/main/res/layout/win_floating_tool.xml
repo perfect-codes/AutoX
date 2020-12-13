@@ -27,8 +27,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginLeft="5dp"
         android:padding="5dp"
-        android:src="@drawable/drag"
-        android:background="#FFFFFF"/>
+        android:src="@drawable/drag"/>
     <TextView
         android:id="@+id/tv_status"
         android:layout_width="wrap_content"

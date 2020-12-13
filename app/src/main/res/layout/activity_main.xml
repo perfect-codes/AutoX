@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="org.autojs.autojs.ui.main.MainActivity">
+    tools:context="com.fj.aux.ui.main.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -37,8 +37,8 @@
         android:id="@+id/marquee"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:background="#88dddddd"
+        android:layout_marginTop="0dp"
+        android:background="#ffffff"
         app:mq_animDuration="1000"
         app:mq_animIn="@anim/marquee_right_in"
         app:mq_animOut="@anim/marquee_left_out"
@@ -47,6 +47,8 @@
         android:id="@+id/rvVideo"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="10dp"
         android:gravity="center"
         android:background="@drawable/bg_shap_rounded_rectangle">
         <TextView
