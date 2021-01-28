@@ -1,6 +1,6 @@
 //视频号
-launchApp('微信')
-sleep(1000)
+//launchApp('微信')
+//sleep(1000)
 //toastLog('视频号')
 //申请截屏权限
 while(!images.requestScreenCapture())
@@ -10,7 +10,7 @@ var runtime = 1
 var collect = false;
 var comment = false;
 var praise = false;
-var comments //评论列表
+var comment_items //评论列表
 var messages //私聊列表
 
 loadSettings()
@@ -85,8 +85,10 @@ function loadSettings(){
         var csStr = files.read(commentSettingPath);
         log(csStr)
         var csObj = JSON.parse(csStr);
-        comments = csObj['comments']
+        comment_items = csObj['comments']
         messages = csObj['messages'];
+    }else{
+        comment_items = ['很喜欢你的视频','大神666','大赞','苍天饶过谁','我中毒了']
     }
 }
 
@@ -187,12 +189,13 @@ function do_collect(withComment) {
 
 //评论
 function do_comment(comment) {
-    // var comments = ['很喜欢你的视频','666','大赞','欠揍','苍天饶过谁','我中毒了']
-    comment.parent().click()
-    sleep(1000)
-    var i = random(0,comments.lenght)
-    input(comments[i])
-    sleep(2000)
-    click('回复')
-    while (!back());
+    if(comment_items && comment_items.length > 0){
+        comment.parent().click()
+        sleep(1000)
+        var i = random(0,comment_items.length-1)
+        setText(comment_items[i])
+        sleep(2000)
+        click('回复')
+        while (!back());
+    }
 }

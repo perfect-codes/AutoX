@@ -88,16 +88,16 @@ public class SettingsActivity extends BaseActivity {
         }
     }
 
-    @CheckedChange(R.id.st_floating)
-    void showOrDismissFloatingWindow(Switch view) {
-        boolean isFloatingWindowShowing = FloatyWindowManger.isCircularMenuShowing();
-        boolean checked = view.isChecked();
-        if (checked && !isFloatingWindowShowing) {
-            FloatyWindowManger.showCircularMenu();
-        } else if (!checked && isFloatingWindowShowing) {
-            FloatyWindowManger.hideCircularMenu();
-        }
-    }
+//    @CheckedChange(R.id.st_floating)
+//    void showOrDismissFloatingWindow(Switch view) {
+//        boolean isFloatingWindowShowing = FloatyWindowManger.isCircularMenuShowing();
+//        boolean checked = view.isChecked();
+//        if (checked && !isFloatingWindowShowing) {
+//            FloatyWindowManger.showCircularMenu();
+//        } else if (!checked && isFloatingWindowShowing) {
+//            FloatyWindowManger.hideCircularMenu();
+//        }
+//    }
 
     @Click(R.id.tv_about)
     public void about(){

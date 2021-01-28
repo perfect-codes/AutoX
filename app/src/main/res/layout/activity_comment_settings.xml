@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minLines="1"
-            android:text="很喜欢你的视频\n大神666\n大赞\n苍天饶过谁\n我中毒了\n同九年何如秀"
+            android:text="很喜欢你的视频\n大神666\n大赞\n苍天饶过谁\n我中毒了"
             android:textSize="12sp"
             android:textColor="@color/theme_color_gray"/>
     </LinearLayout>

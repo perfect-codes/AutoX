@@ -42,8 +42,8 @@ public class CommentSettingsActivity extends BaseActivity {
 
     @ViewById(R.id.et_comment)
     EditText etComment;
-    @ViewById(R.id.et_message)
-    EditText etMessage;
+    /*@ViewById(R.id.et_message)
+    EditText etMessage;*/
 
     List<String> comments, messages;
 
@@ -84,20 +84,20 @@ public class CommentSettingsActivity extends BaseActivity {
                 comments.add(item);
             }
         }
-        if (!TextUtils.isEmpty(etMessage.getText())) {
-            String messageStr = etMessage.getText().toString();
-            String[] messageArray = messageStr.split("\n");
-            if (messages == null) {
-                messages = new ArrayList<>();
-            }
-            messages.clear();
-            for (String item : messageArray) {
-                messages.add(item);
-            }
-        }
+//        if (!TextUtils.isEmpty(etMessage.getText())) {
+//            String messageStr = etMessage.getText().toString();
+//            String[] messageArray = messageStr.split("\n");
+//            if (messages == null) {
+//                messages = new ArrayList<>();
+//            }
+//            messages.clear();
+//            for (String item : messageArray) {
+//                messages.add(item);
+//            }
+//        }
         Map<String, List<String>> map = new HashMap<>(2);
         map.put("comments", comments);
-        map.put("messages", messages);
+//        map.put("messages", messages);
         String data = new Gson().toJson(map);
         Log.d(TAG, data);
         try {
@@ -161,16 +161,16 @@ public class CommentSettingsActivity extends BaseActivity {
                         }
                         etComment.setText(commentStr.toString());
                         etComment.setSelection(etComment.getText().length());
-                        messages = setting.get("messages");
-                        StringBuffer messageStr = new StringBuffer();
-                        for (int i = 0; i < messages.size(); i++) {
-                            if (i > 0) {
-                                messageStr.append("\n");
-                            }
-                            messageStr.append(messages.get(i));
-                        }
-                        etMessage.setText(messageStr);
-                        etMessage.setSelection(etMessage.getText().length());//将光标移至文字末尾
+//                        messages = setting.get("messages");
+//                        StringBuffer messageStr = new StringBuffer();
+//                        for (int i = 0; i < messages.size(); i++) {
+//                            if (i > 0) {
+//                                messageStr.append("\n");
+//                            }
+//                            messageStr.append(messages.get(i));
+//                        }
+//                        etMessage.setText(messageStr);
+//                        etMessage.setSelection(etMessage.getText().length());//将光标移至文字末尾
                     });
         }
     }

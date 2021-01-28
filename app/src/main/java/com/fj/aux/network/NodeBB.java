@@ -27,8 +27,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NodeBB {
 
-//    public static final String BASE_URL = "https://api.fuliduopay.com/";
-    public static final String BASE_URL = "http://192.168.103.119:8080/";
+    public static final String BASE_URL = "http://admin.fuliduopay.com/";
+//    public static final String BASE_URL = "http://192.168.103.119:8080/";
 //    public static final String BASE_URL = "http://192.168.0.100:8080/";
     private static final NodeBB sInstance = new NodeBB();
     private static final String LOG_TAG = "NodeBB";
